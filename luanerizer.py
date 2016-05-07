@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask import request
 import nltk
 import string
@@ -9,11 +9,11 @@ app = Flask(__name__)
 NOUNTAGS = set(['PRP', 'NNP', 'NN', 'NNPS', 'NNS', 'NOUN'])
 LUAN = ':luan:'
 
-@app.route('/', methods=['POST'])
+@app.route('/luanize', methods=['POST'])
 def luanize():
     dataIn = request.form['text']
     luanized = luanizeTextBlock(dataIn)
-    return luanized
+    return jsonify(text=luanized, response_type="in_channel")
 
 def luanizeTextBlock(rawInput):
     tokd = nltk.word_tokenize(rawInput.strip())
