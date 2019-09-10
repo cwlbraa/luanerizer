@@ -58,5 +58,4 @@ Of that Colossal Wreck, boundless and bare,
 The lone and level sands stretch far away."""
 
 if __name__ == '__main__':
-    nltk.download('book')
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', '5000')))
