@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 NOUNTAGS = set(['PRP', 'NNP', 'NN', 'NNPS', 'NNS', 'NOUN'])
-LUAN = ':luan:'
+LUAN = os.environ.get('LUAN', ':luan:')
 
 @app.route('/luanize', methods=['POST'])
 def luanize():
