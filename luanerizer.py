@@ -4,13 +4,15 @@ ye olden luanerizer - a slack slash-command for luanerizing
 import string
 import os
 from flask import Flask, request, jsonify
+from cloudevents.http import CloudEvent, to_structured, from_http
+import requests
 import nltk
 
 app = Flask(__name__)
 
 NOUNTAGS = set(["PRP", "NNP", "NN", "NNPS", "NNS", "NOUN"])
 LUAN = os.environ.get("LUAN", ":luan:")
-
+BROKER_URL = os.environ.get("LUAN", ":luan:")
 
 @app.route("/luanize", methods=["POST"])
 def luanize_post():
@@ -19,6 +21,37 @@ def luanize_post():
     """
     return jsonify(text=luanize(request.form["text"]), response_type="in_channel")
 
+@app.route("/", methods=["POST"])
+def home():
+    event = from_http(request.headers, request.get_data())
+    print(
+        f"""
+        Found {event['id']} from {event['source']} with type "
+        {event['type']} and specversion {event['specversion']} "
+        text: {event['text']}"
+        response_url: {event['response_url']}
+        """
+    )
+    return "", 204
+
+def luanize_post_async(function_request):
+    """
+    takes a form-encoded "text" field & response_url and enqueues a event to luanize the text
+    """
+    attributes = {
+        "type": "dev.cwlbraa.luanerizer",
+        "source": function_request.remote_url,
+    }
+    data = {
+        "text": function_request.form["text"],
+        "response_url": function_request.form["response_url"]
+    }
+    event = CloudEvent(attributes, data)
+
+    # Creates the HTTP request representation of the CloudEvent in structured content mode
+    headers, body = to_structured(event)
+    requests.post(BROKER_URL, data=body, headers=headers)
+    return "", 200
 
 def luanize(text):
     """
@@ -45,14 +78,9 @@ def find_nouns(text):
     """
     returns all the nouns in the text
     """
-    tokd = nltk.word_tokenize(text.strip())
-    nouns = {
-        word_with_tag[0]
-        for word_with_tag in nltk.pos_tag(tokd, tagset="universal")
-        if tagged_word_is_noun(word_with_tag)
-    }
-    return nouns
-
+    tagged = nltk.pos_tag(nltk.word_tokenize(text.strip()), tagset="universal")
+    tagged_nouns = filter(tagged_word_is_noun, tagged)
+    return map(lambda tagged: tagged[0], tagged_nouns)
 
 def tagged_word_is_noun(word_with_tag):
     """
