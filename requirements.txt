@@ -7,6 +7,12 @@ chardet==3.0.4; python_version >= "2.7" and python_full_version < "3.0.0" or pyt
 click==7.1.2; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" \
     --hash=sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc \
     --hash=sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a
+cloudevents==1.2.0 \
+    --hash=sha256:ec7b6c99aed64d16aa9cda8f66010f9d950f5fba6ea9fc8d0ab78139eee6ae3b \
+    --hash=sha256:cddf15c5f29a80c254b1521170fae367c5828b0255c2ef84e3aa4c5f02e44c0f
+deprecation==2.1.0 \
+    --hash=sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a \
+    --hash=sha256:72b3bde64e5d778694b0cf68178aed03d15e15477116add3fb773e581f9518ff
 docopt==0.6.2 \
     --hash=sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491
 flask==1.1.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0") \
@@ -60,6 +66,12 @@ markupsafe==1.1.1; (python_version >= "2.7" and python_full_version < "3.0.0") o
     --hash=sha256:29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b
 nltk==3.5 \
     --hash=sha256:845365449cd8c5f9731f7cb9f8bd6fd0767553b9d53af9eb1b3abf7700936b35
+packaging==20.7; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" \
+    --hash=sha256:eb41423378682dadb7166144a4926e443093863024de508ca5c9737d6bc08376 \
+    --hash=sha256:05af3bb85d320377db281cf254ab050e1a7ebcbf5410685a9a407e18a1f81236
+pyparsing==2.4.7; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" \
+    --hash=sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b \
+    --hash=sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1
 regex==2020.11.13 \
     --hash=sha256:8b882a78c320478b12ff024e81dc7d43c1462aa4a3341c754ee65d857a521f85 \
     --hash=sha256:a63f1a07932c9686d2d416fb295ec2c01ab246e89b4d58e5fa468089cab44b70 \
