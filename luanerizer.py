@@ -40,7 +40,7 @@ def luanize_post_async(function_request):
     """
     attributes = {
         "type": "dev.cwlbraa.luanerizer",
-        "source": function_request.remote_url,
+        "source": function_request.host_url,
     }
     data = {
         "text": function_request.form["text"],
