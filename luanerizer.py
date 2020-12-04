@@ -23,6 +23,9 @@ def luanize_post():
 
 @app.route("/", methods=["POST"])
 def home():
+    """
+    route for processing cloud event emitted by post_async
+    """
     event = from_http(request.headers, request.get_data())
     print(
         f"""
