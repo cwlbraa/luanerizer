@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 NOUNTAGS = set(["PRP", "NNP", "NN", "NNPS", "NNS", "NOUN"])
 LUAN = os.environ.get("LUAN", ":luan:")
-BROKER_URL = os.environ.get("LUAN", ":luan:")
+BROKER_URL = os.environ.get("BROKER_URL", "https://lol.org")
 
 @app.route("/luanize", methods=["POST"])
 def luanize_post():
