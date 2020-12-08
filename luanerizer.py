@@ -4,7 +4,8 @@ ye olden luanerizer - a slack slash-command for luanerizing
 import string
 import os
 from flask import Flask, request, jsonify
-from cloudevents.http import CloudEvent, to_structured, from_http
+from cloudevents.http import CloudEvent, to_binary, from_http
+from google.cloud import pubsub_v1
 import requests
 import nltk
 
@@ -13,6 +14,10 @@ app = Flask(__name__)
 NOUNTAGS = set(["PRP", "NNP", "NN", "NNPS", "NNS", "NOUN"])
 LUAN = os.environ.get("LUAN", ":luan:")
 BROKER_URL = os.environ.get("BROKER_URL", "https://lol.org")
+
+GCP_PROJECT = os.environ.get("GCP_PROJECT", "not-a-project")
+TOPIC_ID="luanerizer"
+TOPIC_PATH = f"projects/{GCP_PROJECT}/topics/{TOPIC_ID}"
 
 @app.route("/luanize", methods=["POST"])
 def luanize_post():
@@ -50,10 +55,27 @@ def luanize_post_async(function_request):
         "response_url": function_request.form["response_url"]
     }
     event = CloudEvent(attributes, data)
-
-    # Creates the HTTP request representation of the CloudEvent in structured content mode
-    headers, body = to_structured(event)
+    headers, body = to_binary(event)
     requests.post(BROKER_URL, data=body, headers=headers)
+    return "", 200
+
+def luanize_post_async_pubsub(function_request):
+    """
+    takes a form-encoded "text" field & response_url and enqueues a event to luanize the text
+    """
+    attributes = {
+        "type": "dev.cwlbraa.luanerizer",
+        "source": function_request.host_url,
+    }
+    data = {
+        "text": function_request.form["text"],
+        "response_url": function_request.form["response_url"]
+    }
+    event = CloudEvent(attributes, data)
+    headers, body = to_binary(event)
+
+    pubsub_v1.PublisherClient().publish(TOPIC_PATH, body, data)
+
     return "", 200
 
 def luanize(text):
