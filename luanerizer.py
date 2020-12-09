@@ -20,7 +20,7 @@ def luanize_post_sync():
     """
     takes a form-encoded "text" field and returns some json for the slackbot
     """
-    return response(request.form["text"])
+    return jsonify(response(request.form["text"]))
 
 
 @app.route("/luanize_async", methods=["POST"])
@@ -52,15 +52,15 @@ def home():
         response_url: {event.data['response_url']}
         """
     )
-    requests.post(event.data["response_url"], data=response(event.data["text"]).body)
+    requests.post(event.data["response_url"], json=response(event.data["text"]))
     return "", 204
 
 
 def response(text):
     """
-    returns jsonified, luanized text to send to slack
+    returns the json dict with, luanized text to send to slack
     """
-    return jsonify(text=luanize(text), response_type="in_channel")
+    return {"text": luanize(text), "response_type": "in_channel"}
 
 
 def luanize(text):
