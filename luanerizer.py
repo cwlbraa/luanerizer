@@ -26,7 +26,7 @@ def luanize_post_sync():
 @app.route("/luanize_async", methods=["POST"])
 def luanize_post_async():
     """
-    takes a form-encoded "text" field & response_url and enqueues a event to luanize the text
+    takes a form-encoded "text" field & response_url and enqueues a event to luanerize the text
     """
     attributes = {
         "type": "dev.cwlbraa.luanerizer",
@@ -44,42 +44,34 @@ def home():
     route for processing cloud event emitted by post_async
     """
     event = from_http(request.headers, request.get_data())
-    print(
-        f"""
-        Found {event['id']} from {event['source']} with type "
-        {event['type']} and specversion {event['specversion']} "
-        text: {event.data['text']}"
-        response_url: {event.data['response_url']}
-        """
-    )
     requests.post(event.data["response_url"], json=response(event.data["text"]))
     return "", 204
 
 
 def response(text):
     """
-    returns the json dict with, luanized text to send to slack
+    returns the json dict with, luanerized text to send to slack
     """
-    return {"text": luanize(text), "response_type": "in_channel"}
+    return {"text": luanerize(text), "response_type": "in_channel"}
 
 
-def luanize(text):
+def luanerize(text):
     """
     takes text, finds the nouns, and turns them into luans
     """
-    nouns = find_nouns(text)
+    nouns = set(find_nouns(text))
 
     def is_noun(chunk):
         return chunk.strip(string.punctuation) in nouns
 
-    def luanize_if_noun(word):
-        return luanize_word(word) if is_noun(word) else word
+    def luanerize_if_noun(word):
+        return luanerize_word(word) if is_noun(word) else word
 
     space_delimited_lines = [line.split() for line in text.splitlines()]
     result = ""
     for line in space_delimited_lines:
-        luanized_words = map(luanize_if_noun, line)
-        result += " ".join(luanized_words) + "\n"
+        luanerized_words = map(luanerize_if_noun, line)
+        result += " ".join(luanerized_words) + "\n"
 
     return result
 
@@ -100,7 +92,7 @@ def tagged_word_is_noun(word_with_tag):
     return word_with_tag[1] in NOUNTAGS
 
 
-def luanize_word(word):
+def luanerize_word(word):
     """
     replace the lemma (ie the non-modifier part of the word)
     with luan
