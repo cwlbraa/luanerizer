@@ -16,11 +16,26 @@ BROKER_URL = os.environ.get("BROKER_URL", "https://lol.org")
 
 
 @app.route("/luanize", methods=["POST"])
-def luanize_post():
+def luanize_post_sync():
     """
     takes a form-encoded "text" field and returns some json for the slackbot
     """
-    return jsonify(text=luanize(request.form["text"]), response_type="in_channel")
+    return response(request.form["text"])
+
+
+@app.route("/luanize_async", methods=["POST"])
+def luanize_post_async():
+    """
+    takes a form-encoded "text" field & response_url and enqueues a event to luanize the text
+    """
+    attributes = {
+        "type": "dev.cwlbraa.luanerizer",
+        "source": request.base_url,
+    }
+    data = {"text": request.form["text"], "response_url": request.form["response_url"]}
+    headers, body = to_binary(CloudEvent(attributes, data))
+    requests.post(BROKER_URL, data=body, headers=headers)
+    return "", 200
 
 
 @app.route("/", methods=["POST"])
@@ -37,23 +52,15 @@ def home():
         response_url: {event.data['response_url']}
         """
     )
+    requests.post(event.data["response_url"], data=response(event.data["text"]))
     return "", 204
 
 
-@app.route("/luanize_async", methods=["POST"])
-def luanize_post_async():
+def response(text):
     """
-    takes a form-encoded "text" field & response_url and enqueues a event to luanize the text
+    returns jsonified, luanized text to send to slack
     """
-    attributes = {
-        "type": "dev.cwlbraa.luanerizer",
-        "source": request.base_url,
-    }
-    data = {"text": request.form["text"], "response_url": request.form["response_url"]}
-    event = CloudEvent(attributes, data)
-    headers, body = to_binary(event)
-    requests.post(BROKER_URL, data=body, headers=headers)
-    return "", 200
+    return jsonify(text=luanize(text), response_type="in_channel")
 
 
 def luanize(text):
