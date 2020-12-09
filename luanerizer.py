@@ -33,8 +33,8 @@ def home():
         f"""
         Found {event['id']} from {event['source']} with type "
         {event['type']} and specversion {event['specversion']} "
-        text: {event['text']}"
-        response_url: {event['response_url']}
+        text: {event.data['text']}"
+        response_url: {event.data['response_url']}
         """
     )
     return "", 204
