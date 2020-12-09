@@ -19,7 +19,9 @@ steps:
       - services
       - update
       - $_SERVICE_NAME
-      - '--platform=gke'
+      - '--platform=$_PLATFORM'
+      - '--cluster=$_CLUSTER'
+      - '--cluster-location=$_CLUSTER_LOCATION'
       - '--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
       - '--set-env-vars=BROKER_URL=$_BROKER_URL'
       - >-
