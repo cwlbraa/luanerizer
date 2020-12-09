@@ -52,7 +52,7 @@ def home():
         response_url: {event.data['response_url']}
         """
     )
-    requests.post(event.data["response_url"], data=response(event.data["text"]))
+    requests.post(event.data["response_url"], data=response(event.data["text"]).body)
     return "", 204
 
 
