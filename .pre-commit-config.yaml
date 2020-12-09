@@ -1,0 +1,20 @@
+---
+repos:
+- repo: local
+  hooks:
+    - id: export-requirements
+      name: export requirements.txt
+      language: system
+      pass_filenames: false
+      entry: poetry export --without-hashes -o requirements.txt
+      files: ^(pyproject.toml|poetry.lock)$
+    - id: pylint
+      name: pylint
+      entry: pylint
+      language: system
+      types: [python]
+- repo: https://github.com/ambv/black
+  rev: 20.8b1
+  hooks:
+  - id: black
+    args: [--safe, --quiet]
