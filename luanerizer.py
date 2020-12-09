@@ -6,7 +6,6 @@ import os
 from flask import Flask, request, jsonify
 from cloudevents.http import CloudEvent, to_binary, from_http
 import requests
-import nltk
 
 app = Flask(__name__)
 
@@ -78,8 +77,11 @@ def luanerize(text):
 
 def find_nouns(text):
     """
-    returns all the nouns in the text
+    returns an iterator over all the nouns in the text
     """
+
+    import nltk  # pylint: disable=import-outside-toplevel
+
     tagged = nltk.pos_tag(nltk.word_tokenize(text.strip()), tagset="universal")
     tagged_nouns = filter(tagged_word_is_noun, tagged)
     return map(lambda tagged: tagged[0], tagged_nouns)
@@ -97,6 +99,9 @@ def luanerize_word(word):
     replace the lemma (ie the non-modifier part of the word)
     with luan
     """
+
+    import nltk  # pylint: disable=import-outside-toplevel
+
     wnl = nltk.stem.WordNetLemmatizer()
     lemma = wnl.lemmatize(word.strip(string.punctuation))
     return word.replace(lemma, LUAN)
