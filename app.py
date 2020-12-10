@@ -4,7 +4,6 @@ ye olden luanerizer - a slack slash-command for luanerizing
 import string
 import os
 from flask import Flask, request, jsonify
-import bjoern
 from cloudevents.http import CloudEvent, to_binary, from_http
 import requests
 
@@ -124,4 +123,4 @@ Of that Colossal Wreck, boundless and bare,
 The lone and level sands stretch far away."""
 
 if __name__ == "__main__":
-    bjoern.run(app, "0.0.0.0", int(os.getenv("PORT", "5000")))
+    app.run(debug=True, host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
