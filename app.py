@@ -34,7 +34,7 @@ def luanize_post_async():
     data = {"text": request.form["text"], "response_url": request.form["response_url"]}
     headers, body = to_binary(CloudEvent(attributes, data))
     requests.post(BROKER_URL, data=body, headers=headers)
-    return "", 200
+    return jsonify({"response_type": "in_channel"})
 
 
 @app.route("/", methods=["POST"])
