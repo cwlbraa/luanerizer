@@ -47,6 +47,14 @@ def home():
     return "", 204
 
 
+@app.route("/healthz", methods=["GET"])
+def healthz():
+    """
+    health check
+    """
+    return jsonify({"success": "true"})
+
+
 def response(text):
     """
     returns the json dict with, luanerized text to send to slack
