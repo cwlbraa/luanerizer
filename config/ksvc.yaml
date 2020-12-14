@@ -1,0 +1,22 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: luanerizer
+spec:
+  template:
+    metadata:
+      name: null
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+    spec:
+      containerConcurrency: 1
+      # image: null
+      containers:
+      - name: luanerizer
+        readinessProbe:
+          httpGet:
+            path: /healthz
+        resources: {}
+  traffic:
+  - latestRevision: true
+    percent: 100
