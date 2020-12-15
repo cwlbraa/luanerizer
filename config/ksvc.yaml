@@ -5,8 +5,6 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: luanerizer
-  annotations:
-    serving.knative.dev/creator: cbraa@vmware.com
 spec:
   template:
     metadata:
