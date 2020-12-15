@@ -13,8 +13,7 @@ steps:
       - push
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
     id: Push
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    entrypoint: kubectl
+  - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - apply
       - -k
@@ -24,9 +23,6 @@ steps:
           path: /spec/template/spec/containers/0/image
           value: $_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
         EOF && echo config/)
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_LOCATION'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
   # - name: gcr.io/google.com/cloudsdktool/cloud-sdk
   #   args:
   #     - run
@@ -49,6 +45,9 @@ images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
 options:
   substitutionOption: ALLOW_LOOSE
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_LOCATION'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
 substitutions:
   _LABELS: gcb-trigger-id=36921152-9563-4da6-87c5-0bba525ee4da
   _TRIGGER_ID: 36921152-9563-4da6-87c5-0bba525ee4da
