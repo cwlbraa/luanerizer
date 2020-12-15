@@ -46,11 +46,12 @@ steps:
   #   entrypoint: gcloud
   - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
     waitFor: ['push-builder', 'push-luanerizer']
-    entrypoint: kubectl
+    entrypoint: bash
     args:
-      - apply
-      - -f
-      - '<(ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)'
+      - '-c'
+      - |-
+        ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA) |\
+          kubectl apply -f -
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
   - '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
