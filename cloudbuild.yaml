@@ -44,22 +44,33 @@ steps:
   #     - '--quiet'
   #   id: Deploy
   #   entrypoint: gcloud
+  # - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
+  #   waitFor: ['push-builder', 'push-luanerizer']
+  #   id: get-credentials
+  #   entrypoint: gcloud
+  #   args:
+  #     - container
+  #     - clusters
+  #     - get-credentials
+  #     - '--project=$PROJECT_ID'
+  #     - '--zone=$_CLUSTER_LOCATION'
+  #     - '$_CLUSTER'
   - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
-    waitFor: ['push-builder', 'push-luanerizer']
+    waitFor: ['get-credentials']
     entrypoint: bash
     args:
       - '-c'
       - |-
         ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA |\
           kubectl apply -f -
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_LOCATION'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
   - '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
 options:
   substitutionOption: ALLOW_LOOSE
-  env:
-    - 'CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_LOCATION'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
 substitutions:
   _LABELS: gcb-trigger-id=36921152-9563-4da6-87c5-0bba525ee4da
   _TRIGGER_ID: 36921152-9563-4da6-87c5-0bba525ee4da
