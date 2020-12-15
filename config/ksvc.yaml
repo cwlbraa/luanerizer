@@ -5,6 +5,8 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: luanerizer
+  annotations:
+    serving.knative.dev/creator: cbraa@vmware.com
 spec:
   template:
     metadata:
@@ -16,9 +18,9 @@ spec:
       containers:
       - name: luanerizer
         image: #@ data.values.image
-        readinessProbe:
-          httpGet:
-            path: /healthz
+        #! readinessProbe:
+        #!   httpGet:
+        #!     path: /healthz
         resources: {}
   traffic:
   - latestRevision: true
