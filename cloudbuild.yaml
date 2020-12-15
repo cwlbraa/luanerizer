@@ -1,18 +1,34 @@
 ---
 steps:
+  - name: gcr.io/cloud-builders/docker
+    id: build-builder
+    args:
+      - build
+      - '-t'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
+      - knbuilder
+    waitFor: ['-']
+  - name: gcr.io/cloud-builders/docker
+    id: push-builder
+    args:
+      - push
+      - '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
+    waitFor: ['build-builder']
   - name: gcr.io/k8s-skaffold/pack
+    id: 'build-luanerizer'
     args:
       - build
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
       - '--builder=heroku/buildpacks'
       - '--path=.'
-    id: Buildpack
     entrypoint: pack
+    waitFor: ['-']
   - name: gcr.io/cloud-builders/docker
+    id: 'push-luanerizer'
     args:
       - push
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-    id: Push
+    waitFor: ['build-luanerizer']
   # - name: gcr.io/google.com/cloudsdktool/cloud-sdk
   #   args:
   #     - run
@@ -28,7 +44,8 @@ steps:
   #     - '--quiet'
   #   id: Deploy
   #   entrypoint: gcloud
-  - name: '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder'
+  - name: '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
+    waitFor: ['push-builder', 'push-luanerizer']
     entrypoint: kubectl
     args:
       - apply
@@ -36,6 +53,7 @@ steps:
       - '<(ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)'
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+  - '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
 options:
   substitutionOption: ALLOW_LOOSE
   env:
@@ -44,7 +62,7 @@ options:
 substitutions:
   _LABELS: gcb-trigger-id=36921152-9563-4da6-87c5-0bba525ee4da
   _TRIGGER_ID: 36921152-9563-4da6-87c5-0bba525ee4da
-  _PLATFORM: managed
+  _PLATFORM: gke
   _SERVICE_NAME: luanerizer
   _DEPLOY_REGION: us-west1
   _GCR_HOSTNAME: us.gcr.io
