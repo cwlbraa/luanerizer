@@ -13,9 +13,9 @@ spec:
         autoscaling.knative.dev/minScale: "1"
     spec:
       containerConcurrency: 1
-      image: #@ data.values.image
       containers:
       - name: luanerizer
+        image: #@ data.values.image
         readinessProbe:
           httpGet:
             path: /healthz
