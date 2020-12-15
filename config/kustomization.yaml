@@ -1,9 +1,0 @@
-resources:
-- ksvc.yaml
-patchesJson6902:
-- target:
-    group: serving.knative.dev
-    version: v1
-    kind: Service
-    name: luanerizer
-  path: patch-image.yaml
