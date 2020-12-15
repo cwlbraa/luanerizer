@@ -5,14 +5,14 @@ steps:
     args:
       - build
       - '-t'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
-      - knbuilder
+      - '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
+      - custom-builder
     waitFor: ['-']
   - name: gcr.io/cloud-builders/docker
     id: push-builder
     args:
       - push
-      - '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
     waitFor: ['build-builder']
   - name: gcr.io/k8s-skaffold/pack
     id: 'build-luanerizer'
@@ -44,7 +44,7 @@ steps:
   #     - '--quiet'
   #   id: Deploy
   #   entrypoint: gcloud
-  - name: '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
+  - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
     waitFor: ['push-builder', 'push-luanerizer']
     entrypoint: kubectl
     args:
@@ -53,7 +53,7 @@ steps:
       - '<(ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)'
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-  - '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder:$COMMIT_SHA'
+  - '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
 options:
   substitutionOption: ALLOW_LOOSE
   env:
