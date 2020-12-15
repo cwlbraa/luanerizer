@@ -60,7 +60,7 @@ steps:
     entrypoint: bash
     args:
       - '-c'
-      - 'kubectl apply -f <(ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)'
+      - 'kapp deploy -y -f <(ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)'
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
   - '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
