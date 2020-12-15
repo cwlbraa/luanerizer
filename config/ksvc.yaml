@@ -1,3 +1,6 @@
+#@ load("@ytt:data", "data")
+
+---
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -10,7 +13,7 @@ spec:
         autoscaling.knative.dev/minScale: "1"
     spec:
       containerConcurrency: 1
-      # image: null
+      image: #@ data.values.image
       containers:
       - name: luanerizer
         readinessProbe:

@@ -13,26 +13,27 @@ steps:
       - push
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
     id: Push
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    args:
-      - run
-      - services
-      - update
-      - $_SERVICE_NAME
-      - '--platform=$_PLATFORM'
-      - '--cluster=$_CLUSTER'
-      - '--cluster-location=$_CLUSTER_LOCATION'
-      - '--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-      - >-
-        --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID,$_LABELS
-      - '--quiet'
-    id: Deploy
-    entrypoint: gcloud
-  - name: 'gcr.io/cloud-builders/kubectl'
+  # - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  #   args:
+  #     - run
+  #     - services
+  #     - update
+  #     - $_SERVICE_NAME
+  #     - '--platform=$_PLATFORM'
+  #     - '--cluster=$_CLUSTER'
+  #     - '--cluster-location=$_CLUSTER_LOCATION'
+  #     - '--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+  #     - >-
+  #       --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID,$_LABELS
+  #     - '--quiet'
+  #   id: Deploy
+  #   entrypoint: gcloud
+  - name: '$_GCR_HOSTNAME/$PROJECT_ID/knbuilder'
+    entrypoint: kubectl
     args:
       - apply
       - -f
-      - config/
+      - '<(ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)'
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
 options:
