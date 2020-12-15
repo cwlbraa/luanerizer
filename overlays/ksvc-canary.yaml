@@ -1,0 +1,13 @@
+#@ load("@ytt:overlay", "overlay")
+#@overlay/match by=overlay.subset({"kind": "Service", "metadata":{"name":"luanerizer"}})
+
+---
+spec:
+  template:
+    metadata:
+      name: luanerizer-canary
+  traffic:
+  #@overlay/append
+  - revisionName: luanerizer-canary
+    percent: 0
+    tag: canary

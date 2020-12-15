@@ -41,11 +41,34 @@ steps:
       - '--zone=$_CLUSTER_LOCATION'
       - '$_CLUSTER'
   - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
-    waitFor: ['get-credentials']
+    id: deploy-canary
     entrypoint: bash
     args:
       - '-c'
-      - 'kapp deploy -a luanerizer -y -f <(ytt -f config/ -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)'
+      - |-
+        kapp deploy -a luanerizer -y -f <(ytt \
+        -f config/ \
+        -f overlays/ksvc-canary.yaml \
+        -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)
+  - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
+    id: check-canary
+    entrypoint: bash
+    args:
+      - '-c'
+      - |-
+          curl http://canary-luanerizer.default.34.83.171.200.xip.io/luanize \
+            -sS -L -X POST \
+            -F 'text=my name is luan' |\
+            grep ':luan:'
+  - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
+    id: deploy-prod
+    entrypoint: bash
+    args:
+      - '-c'
+      - |-
+        kapp deploy -a luanerizer -y -f <(ytt \
+        -f config/ \
+        -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
   - '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'

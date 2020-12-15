@@ -8,7 +8,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: null
+      name: luanerizer-prod
       annotations:
         autoscaling.knative.dev/minScale: "1"
     spec:
@@ -21,5 +21,5 @@ spec:
             path: /healthz
         resources: {}
   traffic:
-  - latestRevision: true
+  - revisionName: luanerizer-prod
     percent: 100
