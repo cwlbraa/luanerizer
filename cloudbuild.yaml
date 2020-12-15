@@ -44,17 +44,17 @@ steps:
   #     - '--quiet'
   #   id: Deploy
   #   entrypoint: gcloud
-  # - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
-  #   waitFor: ['push-builder', 'push-luanerizer']
-  #   id: get-credentials
-  #   entrypoint: gcloud
-  #   args:
-  #     - container
-  #     - clusters
-  #     - get-credentials
-  #     - '--project=$PROJECT_ID'
-  #     - '--zone=$_CLUSTER_LOCATION'
-  #     - '$_CLUSTER'
+  - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
+    waitFor: ['push-builder', 'push-luanerizer']
+    id: get-credentials
+    entrypoint: gcloud
+    args:
+      - container
+      - clusters
+      - get-credentials
+      - '--project=$PROJECT_ID'
+      - '--zone=$_CLUSTER_LOCATION'
+      - '$_CLUSTER'
   - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
     waitFor: ['get-credentials']
     entrypoint: bash
