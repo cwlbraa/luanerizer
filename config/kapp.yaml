@@ -1,0 +1,21 @@
+---
+apiVersion: kapp.k14s.io/v1alpha1
+kind: Config
+
+minimumRequiredVersion: 0.23.0
+
+rebaseRules:
+- path: [metadata, annotations]
+  type: copy
+  sources: [existing, new]
+  resourceMatchers:
+  - apiVersionKindMatcher: {apiVersion: serving.knative.dev/v1, kind: Service}
+
+waitRules:
+- supportsObservedGeneration: true
+  conditionMatchers:
+  - type: Ready
+    status: "True"
+    success: true
+  resourceMatchers:
+  - apiVersionKindMatcher: {apiVersion: serving.knative.dev/v1, kind: Service}
