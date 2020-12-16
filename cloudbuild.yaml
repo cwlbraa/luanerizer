@@ -49,7 +49,7 @@ steps:
         kapp deploy -a luanerizer -y -f <(ytt \
           -f config/ \
           -v canary.deploy=true \
-          -v canary.latestRevision="$(kubectl get ksvc/luanerizer -o=jsonpath={.status.latestReadyRevisionName} || echo null)" \
+          -v canary.previousRevision="$(kubectl get ksvc/luanerizer -o=jsonpath={.status.latestReadyRevisionName} || echo null)" \
           -v image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA)
   - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
     id: check-canary
