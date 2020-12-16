@@ -57,7 +57,7 @@ steps:
     args:
       - '-c'
       - |-
-          curl http://canary-luanerizer.default.34.83.171.200.xip.io/luanize \
+          curl 'http://canary-luanerizer.default.34.83.171.200.xip.io/luanize' \
             -sS -L -X POST \
             --connect-timeout 5 \
             --max-time 10 \
