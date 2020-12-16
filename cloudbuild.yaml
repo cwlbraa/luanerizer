@@ -59,6 +59,11 @@ steps:
       - |-
           curl http://canary-luanerizer.default.34.83.171.200.xip.io/luanize \
             -sS -L -X POST \
+            --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 40 \
             -F 'text=my name is luan' |\
             grep ':luan:'
   - name: '$_GCR_HOSTNAME/$PROJECT_ID/custom-builder:$COMMIT_SHA'
