@@ -8,7 +8,6 @@ metadata:
 spec:
   template:
     metadata:
-      name: luanerizer-prod
       annotations:
         autoscaling.knative.dev/minScale: "1"
     spec:
@@ -21,5 +20,17 @@ spec:
             path: /healthz
         resources: {}
   traffic:
-  - revisionName: luanerizer-prod
+  #@ if data.values.canary.deploy:
+  - latestRevision: true
+    percent: 0
+    tag: canary
+  - percent: 100
+    #@ if data.values.canary.previousRevision:
+    revisionName: #@ data.values.canary.previousRevision
+    #@ else:
+    latestRevision: true
+    #@ end
+  #@ else:
+  - latestRevision: true
     percent: 100
+  #@ end
