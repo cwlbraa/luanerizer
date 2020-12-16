@@ -24,14 +24,19 @@ To accomplish this lofty goal it currently uses a lot of libraries and dev tools
 [It's not a lot of python!](app.py)
 
 Over the years this project has ran in several places as a way of testing out
-various PaaS-like services. Today it's focused [knative](https://knative.dev/).
-- Continuously build and deploys with GCP's Cloud Build Service via [cloudbuild.yaml](cloudbuild.yaml)
+various PaaS-like services.
+
+Today it leverages [knative](https://knative.dev/) as a unified, autoscaling
+compute platform that can handle both synchronous http requests AND queued,
+brokered, and asynchronous CloudEvents.
+
+- Continuously builds and deploys with GCP's Cloud Build Service via [cloudbuild.yaml](cloudbuild.yaml)
 - Uses [Heroku's Cloud Buildpacks](https://index.docker.io/r/heroku/buildpacks)
-  to produce a ready-to-run container image from source.
+  to produce a ready-to-run container image from source
 - GKE, Anthos, and Google Cloud Run to provide a knative runtime
 - A Knative [Service](config/ksvc.yaml) as the only unit of compute
 - A Knative [Broker](config/broker.yaml) & [Trigger](config/trigger.yaml) to
-  queue and dispatch asyncronous requests
+  queue and dispatch asynchronous requests
 - [kapp](https://get-kapp.io/) & [ytt](https://get-ytt.io/) to wrangle k8s yamls and confirm successful rollouts
 
 In the past, this was a 12-factor Cloudfoundry App. It ran on any CF, but mostly
