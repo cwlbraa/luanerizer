@@ -23,8 +23,7 @@ To accomplish this lofty goal it currently uses a lot of libraries and dev tools
 
 [It's not a lot of python!](app.py)
 
-Over the years this project has ran in several places as a way of testing out
-various PaaS-like services.
+Over the years I've carted this project around to various PaaSes as an exercise.
 
 Today it leverages [knative](https://knative.dev/) as a unified, autoscaling
 compute platform that can handle both synchronous http requests AND queued,
