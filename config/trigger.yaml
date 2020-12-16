@@ -1,0 +1,18 @@
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  labels:
+    eventing.knative.dev/broker: luanerizer
+  name: luanerizer
+  namespace: default
+spec:
+  broker: luanerizer
+  filter:
+    attributes:
+      type: dev.cwlbraa.luanerizer
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: luanerizer
+      namespace: default
