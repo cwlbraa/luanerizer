@@ -8,7 +8,9 @@ wherever it determines there's a noun lemma.
 
 ## why?
 
-In 2016, Cloudfoundry contributors started doing this organically out of respect for [luan](https://github.com/luan).
+/luanerize In 2016, Cloudfoundry contributors started doing this organically out of respect for [luan](https://github.com/luan).
+
+luanerizerAPP: In 2016, :luan: :luan:s started doing this organically out of :luan: for :luan:.
 
 ## how's that?
 
