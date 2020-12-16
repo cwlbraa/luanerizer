@@ -3,4 +3,4 @@
 image: ""
 canary:
   deploy: false
-  previousRevision: null
+  previousRevision: ""
