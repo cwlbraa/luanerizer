@@ -438,7 +438,7 @@ test = ["versioneer", "pylint", "pycodestyle", "pyflakes", "pytest", "mock", "py
 
 [[package]]
 name = "python-language-server"
-version = "0.36.1"
+version = "0.36.2"
 description = "Python Language Server for the Language Server Protocol"
 category = "dev"
 optional = false
@@ -622,8 +622,8 @@ requests = "*"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "7fd1d47cd53d56d965015c44cc49d1339cbed71d3fc9b3da6fb4a85fbf6bc4ae"
+python-versions = "^3.8"
+content-hash = "47d49ae66a6c8b4a0e64a4515593f3ef78ba3f6a24366ac18293f806403bbf0c"
 
 [metadata.files]
 appdirs = [
@@ -864,8 +864,8 @@ python-jsonrpc-server = [
     {file = "python_jsonrpc_server-0.4.0-py3-none-any.whl", hash = "sha256:e5a908ff182e620aac07db5f57887eeb0afe33993008f57dc1b85b594cea250c"},
 ]
 python-language-server = [
-    {file = "python-language-server-0.36.1.tar.gz", hash = "sha256:c85d718ef6860319ad59fd6f2acb1166e9349b782ee8e8908e08ecf241615f52"},
-    {file = "python_language_server-0.36.1-py2.py3-none-any.whl", hash = "sha256:0c672aec88fa73f47c36aa4d0b7717868b316a1398d3fb73554955675ce54bae"},
+    {file = "python-language-server-0.36.2.tar.gz", hash = "sha256:9984c84a67ee2c5102c8e703215f407fcfa5e62b0ae86c9572d0ada8c4b417b0"},
+    {file = "python_language_server-0.36.2-py2.py3-none-any.whl", hash = "sha256:a0ad0aca03f4a20c1c40f4f230c6773eac82c9b7cdb026cb09ba10237f4815d5"},
 ]
 pyyaml = [
     {file = "PyYAML-5.3.1-cp27-cp27m-win32.whl", hash = "sha256:74809a57b329d6cc0fdccee6318f44b9b8649961fa73144a98735b0aaf029f1f"},
