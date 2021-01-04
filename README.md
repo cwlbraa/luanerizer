@@ -16,7 +16,7 @@ luanerizerAPP: In 2016, :luan: :luan:s started doing this organically out of :lu
 
 To accomplish this lofty goal it currently uses a lot of libraries and dev tools:
 - [nltk](https://github.com/nltk/nltk) (for finding those noun lemmas)
-- [python](https://github.com/python] (for nltk)
+- [python](https://github.com/python) (for nltk)
 - [poetry](https://github.com/python-poetry/poetry) (for managing python
   libraries and venvs)
 - [flask](https://github.com/pallets/flask) (for serving to Slack's POST request)
