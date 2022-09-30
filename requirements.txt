@@ -9,7 +9,7 @@ gunicorn==20.0.4; python_version >= "3.4"
 idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 itsdangerous==1.1.0; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
 jinja2==2.11.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
-joblib==0.17.0; python_version >= "3.6"
+joblib==1.2.0; python_version >= "3.6"
 markupsafe==1.1.1; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
 nltk==3.5
 packaging==20.7; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
